@@ -1,0 +1,27 @@
+{
+  "name": "define-exceptions",
+  "version": "1.0.0",
+  "description": "Define javascript exceptions",
+  "main": "index.js",
+  "dependencies": {
+    "augment": "^4.3.0",
+    "regexp-string-mapper": "^0.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zerkalica/define-exceptions.git"
+  },
+  "keywords": [
+    "exceptions"
+  ],
+  "author": "Stefan Zerkalica <zerkalica@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zerkalica/define-exceptions/issues"
+  },
+  "homepage": "https://github.com/zerkalica/define-exceptions"
+}
