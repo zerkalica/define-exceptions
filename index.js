@@ -14,7 +14,7 @@ var Exception = function (BaseErrorClass, name, toString) {
 			}
 			this.tokens = options;
 
-			uber.constructor.call(this, arguments);
+			uber.constructor.apply(this, arguments);
 			Error.captureStackTrace(this, BaseError);
 		};
 
