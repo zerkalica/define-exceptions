@@ -43,14 +43,14 @@ var Exceptions = function (BaseErrorClass, map) {
 	return result;
 };
 
-function assert(condition, exception) {
+function assertThrow(condition, Exception, params) {
 	if (!condition) {
-		throw exception;
+		throw new Exception(params);
 	}
 }
 
 module.exports = {
-	assert: assert,
+	assertThrow: assertThrow,
 	Exception: Exception,
 	Exceptions: Exceptions
 };
