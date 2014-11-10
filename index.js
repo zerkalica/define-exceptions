@@ -12,10 +12,12 @@ var Exception = function (BaseErrorClass, name, toString) {
 			if (!(this instanceof BaseError)) {
 				return new BaseError(options);
 			}
-			this.tokens = options;
+			// aetetic @TODO Think about how handle empty options
+			this.tokens = options || {};
 
 			uber.constructor.apply(this, arguments);
 			Error.captureStackTrace(this, BaseError);
+			this.message = mapper.map(this.message, this.tokens);
 		};
 
 		if (typeof toString === 'string') {
