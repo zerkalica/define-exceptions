@@ -7,7 +7,10 @@
     "augment": "^4.3.0",
     "regexp-string-mapper": "^0.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.0.1"
+  },
   "scripts": {
     "test": "mocha test"
   },
