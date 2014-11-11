@@ -1,11 +1,11 @@
 {
   "name": "define-exceptions",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Define javascript exceptions",
   "main": "index.js",
   "dependencies": {
     "augment": "^4.3.0",
-    "regexp-string-mapper": "^0.0.3"
+    "regexp-string-mapper": "^0.0.6"
   },
   "devDependencies": {
     "chai": "^1.10.0",
