@@ -12,18 +12,16 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 	if (!name || typeof name !== 'string') {
 		throw new TypeError('name is not a string - need exception class name');
 	}
-	var BaseError = augment(BaseErrorClass, function init(uber) {
+	var BaseError = augment(BaseErrorClass, function (uber) {
 		this.name = name;
-		this.constructor = function constructor(options) {
+		this.constructor = function (options) {
 			if (!(this instanceof BaseError)) {
 				return new BaseError(options);
 			}
-			this.message = typeof options === 'string' ? options : mapper.map(messageTemplate, options || {});
-
 			uber.constructor.apply(this, arguments);
+			this.message = typeof options === 'string' ? options : mapper.map(messageTemplate, options || {});
 			Error.captureStackTrace(this, BaseError);
 		};
-		
 	});
 
 	return BaseError;
