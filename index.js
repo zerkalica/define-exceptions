@@ -5,54 +5,53 @@ var mapper = RegExpStringMapper({
 	separator: '%'
 });
 
-var Exception = function (BaseErrorClass, name, toString) {
-	var BaseError = augment(BaseErrorClass, function (uber) {
+function Exception(BaseErrorClass, name, messageTemplate) {
+	if (typeof BaseErrorClass !== 'function') {
+		throw new TypeError('BaseErrorClass is not a function');
+	}
+	if (!name || typeof name !== 'string') {
+		throw new TypeError('name is not a string - need exception class name');
+	}
+	var BaseError = augment(BaseErrorClass, function init(uber) {
 		this.name = name;
-		this.constructor = function(options) {
+		this.constructor = function constructor(options) {
 			if (!(this instanceof BaseError)) {
 				return new BaseError(options);
 			}
-			// aetetic @TODO Think about how handle empty options
-			this.tokens = options || {};
+			this.message = typeof options === 'string' ? options : mapper.map(messageTemplate, options || {});
 
 			uber.constructor.apply(this, arguments);
 			Error.captureStackTrace(this, BaseError);
-			this.message = mapper.map(this.message, this.tokens);
 		};
-
-		if (typeof toString === 'string') {
-			this.message = toString;
-		}
-
-		if(typeof toString === 'function') {
-			this.toString = toString.bind(this, this.tokens);
-		} else {
-			this.toString = function baseToString() {
-				return mapper.map(this.message, this.tokens);
-			};
-		}
+		
 	});
 
 	return BaseError;
-};
+}
 
-var Exceptions = function (BaseErrorClass, map) {
+function Exceptions(BaseErrorClass, map) {
+	if (typeof BaseErrorClass !== 'function') {
+		throw new TypeError('BaseErrorClass is not a function');
+	}
+	if (typeof map !== 'object') {
+		throw new TypeError('map is not an object hashmap');
+	}
 	var result = {};
 	for (var name in map) {
 		result[name] = Exception(BaseErrorClass, name, map[name]);
 	}
 
 	return result;
-};
+}
 
-function assertThrow(condition, Exception, params) {
+function assertOk(condition, Exception, params) {
 	if (!condition) {
 		throw new Exception(params);
 	}
 }
 
 module.exports = {
-	assertThrow: assertThrow,
+	assertOk: assertOk,
 	Exception: Exception,
 	Exceptions: Exceptions
 };

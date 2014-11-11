@@ -15,7 +15,7 @@ describe('define-exceptions', function () {
 			});
 			// aetetic @TODO протестировать стек.
 			it('#toString', function () {
-				err.toString().should.be.eql('Super new exception with fooji and bark');
+				err.toString().should.be.eql('SuperException: Super new exception with fooji and bark');
 			});
 		});
 		describe('empty object', function () {
@@ -27,7 +27,7 @@ describe('define-exceptions', function () {
 				err.message.should.be.eql('Super new exception with and ');
 			});
 			it('#toString', function () {
-				err.toString().should.be.eql('Super new exception with and ');
+				err.toString().should.be.eql('SuperException: Super new exception with and ');
 			});
 		});
 	});
