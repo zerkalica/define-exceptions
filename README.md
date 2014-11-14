@@ -1,6 +1,7 @@
 # define-exceptions
 
-Define Single exception:
+## Single exception
+
 ```js
 var de = require('define-exceptions');
 var SuperException = de.Exception(Error, 'SuperException', 'Super new exception with %foo% and %bar%');
@@ -11,7 +12,7 @@ throw new SuperException({foo: 'test1', bar: 'test2'});
 //SuperException: Super new exception with test1 and test2
 ```
 
-Define multiple exceptions:
+## Multiple exceptions
 
 ```js
 //exceptions.js
@@ -29,9 +30,15 @@ module.exports = Exceptions;
 
 ```
 
+## Assertions
+
 ```js
 
 var Exceptions = require('./exceptions');
 
+
+
 throw new Exceptions.ProtoNotFound({path: '/path/to', params: [1, 2, 3]});
+
+Exceptions.ProtoNotFound.ok(false, {path: '/path/to', params: [1, 2, 3]});
 ```

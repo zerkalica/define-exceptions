@@ -12,6 +12,7 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 	if (!name || typeof name !== 'string') {
 		throw new TypeError('name is not a string - need exception class name');
 	}
+
 	var BaseError = augment(BaseErrorClass, function (uber) {
 		this.name = name;
 		this.constructor = function (options) {
@@ -23,6 +24,12 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 			Error.captureStackTrace(this, BaseError);
 		};
 	});
+
+	BaseError.ok = function ok(condition, params) {
+		if (!condition) {
+			throw new BaseError(params);
+		}
+	};
 
 	return BaseError;
 }
@@ -42,14 +49,7 @@ function Exceptions(BaseErrorClass, map) {
 	return result;
 }
 
-function assertOk(condition, Exception, params) {
-	if (!condition) {
-		throw new Exception(params);
-	}
-}
-
 module.exports = {
-	assertOk: assertOk,
 	Exception: Exception,
 	Exceptions: Exceptions
 };
