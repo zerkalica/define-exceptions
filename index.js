@@ -1,9 +1,8 @@
-var augment = require('augment');
-var RegExpStringMapper = require('regexp-string-mapper');
-
-var mapper = RegExpStringMapper({
-	separator: '%'
-});
+function strMap(template, args) {
+	return template.replace(/%(.*?)%/g, function(all, matchName) {
+		return args[matchName] || '';
+	});
+}
 
 function Exception(BaseErrorClass, name, messageTemplate) {
 	if (typeof BaseErrorClass !== 'function') {
@@ -13,18 +12,21 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 		throw new TypeError('name is not a string - need exception class name');
 	}
 
-	var BaseError = augment(BaseErrorClass, function (uber) {
+	function BaseError(options) {
+		if (!(this instanceof BaseError)) {
+			return new BaseError(options);
+		}
 		this.name = name;
-		this.constructor = function (options) {
-			if (!(this instanceof BaseError)) {
-				return new BaseError(options);
-			}
-			uber.constructor.apply(this, arguments);
-			this.message = typeof options === 'string' ? options : mapper.map(messageTemplate, options || {});
-			Error.captureStackTrace(this, BaseError);
-		};
-	});
+		this.message = typeof options === 'string' ? options : strMap(messageTemplate, options || {});
+		for(var prop in options) {
+			this[prop] = options[prop];
+		}
 
+		Error.captureStackTrace(this, BaseError);
+	}
+
+	BaseError.prototype = Object.create(BaseErrorClass.prototype);
+	BaseError.prototype.constructor = BaseError;
 	BaseError.ok = function ok(condition, params) {
 		if (!condition) {
 			throw new BaseError(params);
@@ -34,7 +36,7 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 	return BaseError;
 }
 
-function Exceptions(BaseErrorClass, map) {
+Exception.map = function map(BaseErrorClass, map) {
 	if (typeof BaseErrorClass !== 'function') {
 		throw new TypeError('BaseErrorClass is not a function');
 	}
@@ -47,9 +49,6 @@ function Exceptions(BaseErrorClass, map) {
 	}
 
 	return result;
-}
-
-module.exports = {
-	Exception: Exception,
-	Exceptions: Exceptions
 };
+
+module.exports = Exception;
