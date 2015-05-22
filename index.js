@@ -17,16 +17,36 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 			return new BaseError(options);
 		}
 		this.name = name;
-		this.message = typeof options === 'string' ? options : strMap(messageTemplate, options || {});
-		for(var prop in options) {
-			this[prop] = options[prop];
+		if (typeof options === 'string') {
+			options = {message: options};
+		} else {
+			this.message = strMap(messageTemplate, options || {});
 		}
+
+		for(var prop in options) {
+			if (typeof this[prop] === 'undefined') {
+				this[prop] = options[prop];
+			}
+		}
+		this.__options = options;
 
 		Error.captureStackTrace(this, BaseError);
 	}
 
 	BaseError.prototype = Object.create(BaseErrorClass.prototype);
 	BaseError.prototype.constructor = BaseError;
+	BaseError.prototype.toJSON = function toJSON() {
+		var result = {
+			name: this.name,
+			message: this.message
+		};
+		for (var name in this.__options) {
+			result[name] = this.__options[name];
+		}
+
+		return result;
+	};
+	BaseError.name = name;
 	BaseError.ok = function ok(condition, params) {
 		if (!condition) {
 			throw new BaseError(params);
