@@ -35,7 +35,7 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 
 	BaseError.prototype = Object.create(BaseErrorClass.prototype);
 	BaseError.prototype.constructor = BaseError;
-	BaseError.prototype.toJSON = function toJSON() {
+	BaseError.prototype.toJS = function toJS() {
 		var result = {
 			name: this.name,
 			message: this.message
@@ -46,6 +46,11 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 
 		return result;
 	};
+
+	BaseError.prototype.toJSON = function toJSON() {
+		return JSON.stringify(this.toJS());
+	};
+
 	BaseError.name = name;
 	BaseError.ok = function ok(condition, params) {
 		if (!condition) {
