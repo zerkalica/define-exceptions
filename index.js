@@ -12,7 +12,7 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 		throw new TypeError('name is not a string - need exception class name');
 	}
 
-	function BaseError(options) {w
+	function BaseError(options) {
 		if (!(this instanceof BaseError)) {
 			return new BaseError(options);
 		}
