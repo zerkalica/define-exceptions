@@ -1,6 +1,6 @@
 {
   "name": "define-exceptions",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "Define javascript exceptions",
   "main": "index.js",
   "devDependencies": {

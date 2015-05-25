@@ -12,39 +12,27 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 		throw new TypeError('name is not a string - need exception class name');
 	}
 
-	function BaseError(options) {
+	function BaseError(options) {w
 		if (!(this instanceof BaseError)) {
 			return new BaseError(options);
 		}
-		this.name = name;
+		Error.call(this);
+		Error.captureStackTrace(this, BaseError);
 		if (typeof options === 'string') {
 			options = {message: options};
 		} else {
-			this.message = strMap(messageTemplate, options || {});
+			options = options || {};
+			options.message = strMap(messageTemplate, options);
 		}
-
-		for(var prop in options) {
-			if (typeof this[prop] === 'undefined') {
-				this[prop] = options[prop];
-			}
-		}
+		this.name = options.name = name;
+		this.message = options.message;
 		this.__options = options;
-
-		Error.captureStackTrace(this, BaseError);
 	}
 
 	BaseError.prototype = Object.create(BaseErrorClass.prototype);
 	BaseError.prototype.constructor = BaseError;
 	BaseError.prototype.toJS = function toJS() {
-		var result = {
-			name: this.name,
-			message: this.message
-		};
-		for (var name in this.__options) {
-			result[name] = this.__options[name];
-		}
-
-		return result;
+		return this.__options;
 	};
 
 	BaseError.prototype.toJSON = function toJSON() {
