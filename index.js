@@ -27,11 +27,17 @@ function Exception(BaseErrorClass, name, messageTemplate) {
 		this.name = options.name = name;
 		this.message = options.message;
 		this.__options = options;
+		for (var key in options) {
+			if(typeof this[key] === 'undefined') {
+				this[key] = options[key];
+			}
+		}
 	}
 
 	BaseError.prototype = Object.create(BaseErrorClass.prototype);
 	BaseError.prototype.constructor = BaseError;
 	BaseError.prototype.toJS = function toJS() {
+		this.__options.stack = this.stack;
 		return this.__options;
 	};
 
