@@ -30,6 +30,7 @@ function Exception(BaseErrorClass, name, messageTemplate) {
             options = options || {};
             options.message = strMap(messageTemplate, options);
         }
+        this.name = name;
         options.name = name;
         options.stack = this.stack;
         this.__options = options;
